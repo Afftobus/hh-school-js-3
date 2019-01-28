@@ -74,12 +74,37 @@ function SuggestInput(machine) {
         that.input.value = '';
     };
 
-    this.setErrorMode = function () {
+    this.setErrorMode = function (error) {
         console.log("setErrorMode");
+
+        if (that.list_div === null)
+            that.list_div = document.createElement("div");
+        else
+            that.list_div.innerHTML = '';
+
+        that.list_div.classList.add("suggest-input__suggest-list");
+
+        let just_one_item = document.createElement("div");
+        just_one_item.classList.add("suggest-input__suggest-list-item-error");
+
+        just_one_item.innerHTML = error;
+        just_one_item.addEventListener('click', that.confirmError );
+        that.list_div.appendChild(just_one_item);
+
+        if (!that.object.contains(that.list_div))
+            that.object.appendChild(that.list_div);
+
+
     };
 
     this.unsetErrorMode = function () {
         console.log("unsetErrorMode");
+        if (that.object.contains(that.list_div))
+            that.object.removeChild(that.list_div);
+    };
+
+    this.confirmError = function () {
+        that.machine.transition('confirm');
     };
 
     this.setWaitMode = function () {
